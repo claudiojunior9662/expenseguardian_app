@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer tailwind-base, tailwind-utilities;
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  background: var(--surface-ground);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+/* Estilo para a imagem do logo */
+.logo {
+  width: 100px; /* Ajuste o tamanho conforme necessário */
+  margin-bottom: 20px;
+  height: auto;
+}
+
+.logo-min {
+  width: 40px; /* Ajuste o tamanho conforme necessário */
+  height: auto;
+}

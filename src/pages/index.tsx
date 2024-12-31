@@ -1,13 +1,18 @@
-import MainLayout from "@/components/main-layout/main-layout";
 import MainPage from "@/components/main-page/main-page";
-import { SessionProvider } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export default function Layout() {
+    const session = useSession();
+
+    useEffect(() => {
+        if(session.status === "loading") return;
+
+        if(session.data)
+            localStorage.setItem("apiAuthToken", session.data.authorizationToken!);
+    }, []);
+
     return (
-        <SessionProvider>
-            <MainLayout>
-                <MainPage />
-            </MainLayout>
-        </SessionProvider>
+        <MainPage />
     )
 }

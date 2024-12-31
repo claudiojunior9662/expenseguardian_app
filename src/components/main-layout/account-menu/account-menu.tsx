@@ -4,7 +4,6 @@ import { Avatar, Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { MouseEvent } from 'react';
 
 import { signOut } from "next-auth/react";
-import { redirect } from "next/dist/server/api-utils";
 
 interface AccountMenuProps {
     anchorEl: null | HTMLElement;

@@ -1,11 +1,10 @@
 import { UserResumeResponseSpents } from '@/modules/main-page/entities/user-resume-response.entity';
 import GetUserResumeService from '@/modules/main-page/services/get-user-resume.service';
 import { formatCurrency } from '@/shared/utils';
-import { Card, styled } from '@mui/material';
+import { Box, Card, styled } from '@mui/material';
 import { BarChart, LineChart, LineSeriesType, PieValueType, useDrawingArea } from '@mui/x-charts';
 import { DatasetElementType, MakeOptional } from '@mui/x-charts/internals';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 export default function MainPage() {
@@ -17,18 +16,15 @@ export default function MainPage() {
     const [ incomeValue, setIncomeValue ] = useState<number>(0);
     const [ outcomeValue, setOutcomeValue ] = useState<number>(0);
     const [ availableValue, setAvailableValue ] = useState<number>(0);
-    const { data: session } = useSession();
 
     useEffect(() => {
-        if(!session) return;
-
         getUserResumeService.execute(
             {
                 initialDate: new Date('2024-01-01'),
                 finalDate: new Date('2024-03-30'),
                 userId: 1
             },
-            session.authorizationToken!
+            localStorage.getItem('apiAuthToken')!
         ).then((response) => {
             setSpentsChartData(response.data.spents.map((spent: UserResumeResponseSpents) => {
                 return {
@@ -66,7 +62,7 @@ export default function MainPage() {
             setOutcomeValue(response.data.totalOutcomes);
             setAvailableValue(response.data.available);
         });
-    }, [session]);
+    }, []);
 
     const StyledText = styled('text')(({ theme }) => ({
         fill: theme.palette.text.primary,
@@ -97,7 +93,7 @@ export default function MainPage() {
     }
 
     return(
-        <div>
+        <Box sx={{ width: '100%', paddingLeft: '10px', paddingRight: '10px' }}>
             <Card id='resume-card' className='mb-3'>
                 <p id='resume-card-title' className='font-bold p-2 text-lg'>Resume</p>
                 <div className="flex flex-row">
@@ -142,6 +138,6 @@ export default function MainPage() {
                     <p id='balance-card-title' className='font-bold p-2'>{`Available: ${formatCurrency(availableValue)}`}</p>
                 </Card>
             </div>
-        </div>
+        </Box>
     );
 }

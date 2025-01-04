@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Drawer, Typography } from "@mui/material";
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Drawer } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
 import { useRouter } from "next/navigation";
@@ -36,6 +36,14 @@ const MainDrawer = ({ open, handleClose }: MainDrawerProps) => {
                             <CategoryIcon />
                         </ListItemIcon>
                         <ListItemText primary={'Budget Categories'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={'Investment Categories'} disablePadding>
+                    <ListItemButton onClick={() => handleRoute('/investment/categories')}>
+                        <ListItemIcon>
+                            <CategoryIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Investment Categories'} />
                     </ListItemButton>
                 </ListItem>
             </List>

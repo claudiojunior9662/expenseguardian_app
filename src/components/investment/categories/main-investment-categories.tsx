@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BudgetCategory } from "@/modules/budget/entities/budget-category.entity";
-import { BudgetCategoryContext } from "@/modules/budget/infraestructure/budget-category.context";
 import { Box, Button, Tooltip } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useContext, useEffect, useState } from "react";
@@ -14,15 +12,17 @@ import { randomId } from '@mui/x-data-grid-generator';
 import AddIcon from '@mui/icons-material/Add';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { BudgetCategoryDataRow } from "@/modules/budget/entities/budget-category-data-row.entity";
 import MainBreadcumbs from "@/components/main-layout/main-breadcumb/main-breadcumb";
+import { InvestmentCategoryDataRow } from "@/modules/investment/entities/investment-category-data-row.entity";
+import { InvestmentCategoryContext } from "@/modules/investment/infraestructure/investment-category.context";
+import { InvestmentCategory } from "@/modules/investment/entities/investment-category.entity";
 
 function EditToolbar(props: GridSlotProps['toolbar']) {
-    const { setBudgetCategoriesRows, setRowModesModel } = props;
+    const { setInvestmentCategoriesRows, setRowModesModel } = props;
   
     const handleClick = () => {
       const id = randomId();
-      setBudgetCategoriesRows((oldRows) => [
+      setInvestmentCategoriesRows((oldRows) => [
         ...oldRows,
         { id, description: '', isNew: true },
       ]);
@@ -41,32 +41,32 @@ function EditToolbar(props: GridSlotProps['toolbar']) {
     );
 }
 
-export default function MainBudgetCategories() {
+export default function MainInvestmentCategories() {
 
-    const { createBudgetCategory, deleteBudgetCategory, listBudgetCategories, updateBudgetCategory } = useContext(BudgetCategoryContext);
-    const [  budgetCategoriesRows, setBudgetCategoriesRows ] = useState<BudgetCategoryDataRow[]>([]);
+    const { createInvestmentCategory, deleteInvestmentCategory, listInvestmentCategories, updateInvestmentCategory } = useContext(InvestmentCategoryContext);
+    const [  investmentCategoriesRows, setInvestmentCategoriesRows ] = useState<InvestmentCategoryDataRow[]>([]);
     const [ rowModesModel, setRowModesModel ] = React.useState<GridRowModesModel>({});
     const Advice = withReactContent(Swal)
 
     useEffect(() => {
         const decodedToken = jwtDecode<{ id: number }>(localStorage.getItem("apiAuthToken")!);
 
-        listBudgetCategories
+        listInvestmentCategories
             .execute(decodedToken.id, localStorage.getItem("apiAuthToken")!)
             .then((response) => {
-                setBudgetCategoriesRows(response.data.map((budgetCategory) => {
+                setInvestmentCategoriesRows(response.data.map((InvestmentCategory) => {
                     return {
                         id: randomId(),
-                        dataId: budgetCategory.id,
-                        description: budgetCategory.description,
-                        userId: budgetCategory.userId,
+                        dataId: InvestmentCategory.id,
+                        description: InvestmentCategory.description,
+                        userId: InvestmentCategory.userId,
                         isNew: false
                     }
                 }));
             });
     }, []);
 
-    const columns: GridColDef<(typeof budgetCategoriesRows)[number]>[] = [
+    const columns: GridColDef<(typeof InvestmentCategoriesRows)[number]>[] = [
         {
             field: 'description',
             headerName: 'Description',
@@ -138,10 +138,10 @@ export default function MainBudgetCategories() {
             confirmButtonText: 'Yes, delete it!',
         }).then((result) => {
             if (result.isConfirmed) {
-                const row = budgetCategoriesRows.find((row) => row.id === id);
+                const row = investmentCategoriesRows.find((row) => row.id === id);
 
-                deleteBudgetCategory.execute(row!.dataId!, localStorage.getItem("apiAuthToken")!).then(() => {
-                    setBudgetCategoriesRows(budgetCategoriesRows.filter((row) => row.id !== id));
+                deleteInvestmentCategory.execute(row!.dataId!, localStorage.getItem("apiAuthToken")!).then(() => {
+                    setInvestmentCategoriesRows(investmentCategoriesRows.filter((row) => row.id !== id));
                 }).catch(() => {
                     Advice.fire({
                         title: 'Error while deleting!',
@@ -160,9 +160,9 @@ export default function MainBudgetCategories() {
             [id]: { mode: GridRowModes.View, ignoreModifications: true },
         });
     
-        const editedRow = budgetCategoriesRows.find((row) => row.id === id);
+        const editedRow = InvestmentCategoriesRows.find((row) => row.id === id);
         if (editedRow!.isNew) {
-            setBudgetCategoriesRows(budgetCategoriesRows.filter((row) => row.id !== id));
+            setInvestmentCategoriesRows(InvestmentCategoriesRows.filter((row) => row.id !== id));
         }
     };
 
@@ -177,17 +177,17 @@ export default function MainBudgetCategories() {
     };
 
     const processRowUpdate = (newRow: GridRowModel) => {
-        const row = budgetCategoriesRows.find((row) => row.id === newRow.id);
+        const row = investmentCategoriesRows.find((row) => row.id === newRow.id);
 
         const decodedToken = jwtDecode(localStorage.getItem("apiAuthToken")!);
 
         if (row!.isNew) {
-            const budgetCategory: BudgetCategory = {
+            const investmentCategory: InvestmentCategory = {
                 description: newRow.description,
                 userId: decodedToken.id
             };
 
-            createBudgetCategory.execute(budgetCategory, localStorage.getItem("apiAuthToken")!).then(() => {
+            createInvestmentCategory.execute(investmentCategory, localStorage.getItem("apiAuthToken")!).then(() => {
                 return updatedRow;
             }).catch(() => {
                 Advice.fire({
@@ -199,13 +199,13 @@ export default function MainBudgetCategories() {
                 return null;
             });
         } else {
-            const budgetCategory: BudgetCategory = {
+            const investmentCategory: InvestmentCategory = {
                 id: newRow.dataId,
                 description: newRow.description,
                 userId: decodedToken.id
             };
 
-            updateBudgetCategory.execute(budgetCategory, localStorage.getItem("apiAuthToken")!).then(() => {
+            updateInvestmentCategory.execute(investmentCategory, localStorage.getItem("apiAuthToken")!).then(() => {
                 return updatedRow;
             }).catch(() => {
                 Advice.fire({
@@ -220,15 +220,15 @@ export default function MainBudgetCategories() {
 
         const updatedRow = newRow;
         updatedRow.isNew = false;
-        setBudgetCategoriesRows(budgetCategoriesRows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+        setInvestmentCategoriesRows(investmentCategoriesRows.map((row) => (row.id === newRow.id ? updatedRow : row)));
         return updatedRow;
     };
 
     return (
         <Box sx={{ width: '100%', paddingLeft: '10px', paddingRight: '10px' }}>
-            <MainBreadcumbs openedLink="Budget Categories" />
+            <MainBreadcumbs openedLink="Investment Categories" />
             <DataGrid
-                rows={budgetCategoriesRows}
+                rows={investmentCategoriesRows}
                 columns={columns}
                 initialState={{
                 pagination: {
@@ -246,7 +246,7 @@ export default function MainBudgetCategories() {
                 processRowUpdate={processRowUpdate}
                 slots={{ toolbar: EditToolbar }}
                 slotProps={{
-                    toolbar: { setBudgetCategoriesRows, setRowModesModel },
+                    toolbar: { setInvestmentCategoriesRows, setRowModesModel },
                   }}
             />
             </Box>

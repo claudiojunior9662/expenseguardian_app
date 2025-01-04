@@ -9,8 +9,8 @@ export default function Layout() {
         if(session.status === "loading") return;
 
         if(session.data)
-            localStorage.setItem("apiAuthToken", session.data.authorizationToken!);
-    }, []);
+            localStorage.setItem("apiAuthToken", session.data!.authorizationToken!);
+    }, [session]);
 
     return (
         <MainPage />

@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import MainBreadcumbs from "@/components/main-layout/main-breadcumb/main-breadcumb";
-import { BudgetContext } from "@/modules/budget/infraestructure/budget.context";
+import { BudgetContext } from "@/modules/budget/infrastructure/budget.context";
 import { BudgetDataRow } from "@/modules/budget/entities/budget-data-row.entity";
 import { Budget } from "@/modules/budget/entities/budget.entity";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -21,12 +21,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { NumericFormat } from 'react-number-format';
 import { Dayjs } from "dayjs";
-import { BudgetCategoryContext } from "@/modules/budget/infraestructure/budget-category.context";
+import { BudgetCategoryContext } from "@/modules/budget/infrastructure/budget-category.context";
 import { BudgetCategory } from "@/modules/budget/entities/budget-category.entity";
 import { BudgetCategoryPercentageDataRow } from "@/modules/budget/entities/budget-category-percentage-data-row.entity";
 import BalanceIcon from '@mui/icons-material/Balance';
 import { BudgetCategoryPercentage } from "@/modules/budget/entities/budget-category-percentage.entity";
-import { BudgetCategoryPercentageContext } from "@/modules/budget/infraestructure/budget-category-percentage.context";
+import { BudgetCategoryPercentageContext } from "@/modules/budget/infrastructure/budget-category-percentage.context";
 
 export default function MainBudgets() {
 

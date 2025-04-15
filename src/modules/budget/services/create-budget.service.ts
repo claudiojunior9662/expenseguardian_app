@@ -1,9 +1,9 @@
 import { Budget } from "../entities/budget.entity";
-import BudgetInfraestructure from "../infraestructure/budget.infraestructure";
+import BudgetInfrastructure from "../infrastructure/budget.infrastructure";
 
 export default class CreateBudgetService {
     async execute(userBudget: Budget, token: string) {
-        const provider = new BudgetInfraestructure();
+        const provider = new BudgetInfrastructure();
         return (await provider.createBudget(userBudget, token));
     }
 }

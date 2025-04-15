@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BudgetCategory } from "@/modules/budget/entities/budget-category.entity";
-import { BudgetCategoryContext } from "@/modules/budget/infraestructure/budget-category.context";
+import { BudgetCategoryContext } from "@/modules/budget/infrastructure/budget-category.context";
 import { Box, Button, Tooltip } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useContext, useEffect, useState } from "react";

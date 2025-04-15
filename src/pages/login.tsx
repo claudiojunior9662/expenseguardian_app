@@ -5,24 +5,27 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import Link from 'next/link';
 import logo from '../shared/images/logo-expense-guardian.png';
 import Image from "next/image";
+import { useEffect } from "react";
 
 export default function Login() {
+  useEffect(() => {
+    localStorage.removeItem("apiAuthToken");
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const result = await signIn("credentials", {
+    signIn("credentials", {
       email,
       password,
       redirect: true,
       callbackUrl: "/",
+    }).catch((error) => {
+      console.error(error);
     });
-
-    if (result?.error) {
-      console.error(result.error); // Lidar com erros
-    }
   };
 
   return (

@@ -54,19 +54,19 @@ export default function MainInvestmentCategories() {
         listInvestmentCategories
             .execute(decodedToken.id, localStorage.getItem("apiAuthToken")!)
             .then((response) => {
-                setInvestmentCategoriesRows(response.data.map((InvestmentCategory) => {
+                setInvestmentCategoriesRows(response.data.map((investmentCategory) => {
                     return {
                         id: randomId(),
-                        dataId: InvestmentCategory.id,
-                        description: InvestmentCategory.description,
-                        userId: InvestmentCategory.userId,
+                        dataId: investmentCategory.id,
+                        description: investmentCategory.description,
+                        userId: investmentCategory.userId,
                         isNew: false
                     }
                 }));
             });
     }, []);
 
-    const columns: GridColDef<(typeof InvestmentCategoriesRows)[number]>[] = [
+    const columns: GridColDef<(typeof investmentCategoriesRows)[number]>[] = [
         {
             field: 'description',
             headerName: 'Description',
@@ -160,9 +160,9 @@ export default function MainInvestmentCategories() {
             [id]: { mode: GridRowModes.View, ignoreModifications: true },
         });
     
-        const editedRow = InvestmentCategoriesRows.find((row) => row.id === id);
+        const editedRow = investmentCategoriesRows.find((row) => row.id === id);
         if (editedRow!.isNew) {
-            setInvestmentCategoriesRows(InvestmentCategoriesRows.filter((row) => row.id !== id));
+            setInvestmentCategoriesRows(investmentCategoriesRows.filter((row) => row.id !== id));
         }
     };
 

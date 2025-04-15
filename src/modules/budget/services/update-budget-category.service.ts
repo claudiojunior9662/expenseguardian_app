@@ -1,9 +1,9 @@
 import { BudgetCategory } from "../entities/budget-category.entity";
-import BudgetCategoryInfraestructure from "../infraestructure/budget-category.infraestructure";
+import BudgetCategoryInfrastructure from "../infrastructure/budget-category.infrastructure";
 
 export default class UpdateBudgetCategoryService {
     async execute(userBudgetCategory: BudgetCategory, token: string) {
-        const provider = new BudgetCategoryInfraestructure();
+        const provider = new BudgetCategoryInfrastructure();
         return (await provider.updateBudgetCategory(userBudgetCategory, token));
     }
 }

@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { BudgetCategory } from "../entities/budget-category.entity";
 
-export default class BudgetCategoryInfraestructure {
+export default class BudgetCategoryInfrastructure {
 
     private readonly axiosComponent = axios.create({
         baseURL: process.env.NEXT_PUBLIC_API_BASE_URL

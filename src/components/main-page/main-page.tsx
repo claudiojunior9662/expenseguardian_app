@@ -16,52 +16,63 @@ export default function MainPage() {
     const [ incomeValue, setIncomeValue ] = useState<number>(0);
     const [ outcomeValue, setOutcomeValue ] = useState<number>(0);
     const [ availableValue, setAvailableValue ] = useState<number>(0);
+    const [ loading, setLoading ] = useState<boolean>(false);
 
     useEffect(() => {
-        getUserResumeService.execute(
-            {
-                initialDate: new Date('2024-01-01'),
-                finalDate: new Date('2024-03-30'),
-                userId: 1
-            },
-            localStorage.getItem('apiAuthToken')!
-        ).then((response) => {
-            setSpentsChartData(response.data.spents.map((spent: UserResumeResponseSpents) => {
-                return {
-                    value: spent.percentage,
-                    label: spent.description
-                }
-            }));
-
-            const incomes: LineSeriesType = {
-                type: 'line',
-                curve: 'natural',
-                data: response.data.incomes.map((income) => {
-                    return income.value;
-                })
-            };
-
-            const outcomes: LineSeriesType = {
-                type: 'line',
-                curve: 'natural',
-                data: response.data.outcomes.map((outcome) => {
-                    return outcome.value;
-                })
-            };
-
-            setIncomesOutcomesChartData([incomes, outcomes]);
-
-            setInvestmentsChartData(response.data.investments.map((investment) => {
-                return {
-                    description: investment.description,
-                    percentage: investment.percentage
-                }
-            }));
-
-            setIncomeValue(response.data.totalIncomes);
-            setOutcomeValue(response.data.totalOutcomes);
-            setAvailableValue(response.data.available);
-        });
+        setLoading(true);
+        const interval = setInterval(() => {
+            const token = localStorage.getItem('apiAuthToken');
+            if (token) {
+                clearInterval(interval);
+                getUserResumeService.execute(
+                    {
+                        initialDate: new Date('2024-01-01'),
+                        finalDate: new Date('2024-03-30'),
+                        userId: 1
+                    },
+                    token
+                ).then((response) => {
+                    setSpentsChartData(response.data.spents.map((spent: UserResumeResponseSpents) => {
+                        return {
+                            value: spent.percentage,
+                            label: spent.description
+                        }
+                    }));
+        
+                    const incomes: LineSeriesType = {
+                        type: 'line',
+                        curve: 'natural',
+                        data: response.data.incomes.map((income) => {
+                            return income.value;
+                        })
+                    };
+        
+                    const outcomes: LineSeriesType = {
+                        type: 'line',
+                        curve: 'natural',
+                        data: response.data.outcomes.map((outcome) => {
+                            return outcome.value;
+                        })
+                    };
+        
+                    setIncomesOutcomesChartData([incomes, outcomes]);
+        
+                    setInvestmentsChartData(response.data.investments.map((investment) => {
+                        return {
+                            description: investment.description,
+                            percentage: investment.percentage
+                        }
+                    }));
+        
+                    setIncomeValue(response.data.totalIncomes);
+                    setOutcomeValue(response.data.totalOutcomes);
+                    setAvailableValue(response.data.available);
+                    setLoading(false);
+                });
+            }
+        }, 1000);
+    
+        return () => clearInterval(interval);
     }, []);
 
     const StyledText = styled('text')(({ theme }) => ({
@@ -98,12 +109,12 @@ export default function MainPage() {
                 <p id='resume-card-title' className='font-bold p-2 text-lg'>Resume</p>
                 <div className="flex flex-row">
                     <div className="basis-1/4 grow">
-                        <PieChart series={[{ data: spentsChartData, innerRadius: 100 }]} resolveSizeBeforeRender={true}>
+                        <PieChart series={[{ data: spentsChartData, innerRadius: 100 }]} resolveSizeBeforeRender={true} loading={loading}>
                             {spentsChartData.length > 0 ? <PieCenterLabel>Center label</PieCenterLabel> : null}
                         </PieChart>
                     </div>
                     <div className="basis-1/4 grow">
-                        <LineChart series={ incomesOutcomesChartData } resolveSizeBeforeRender={true}
+                        <LineChart series={ incomesOutcomesChartData } resolveSizeBeforeRender={true} loading={loading}
                         />
                     </div>
                     <div className="basis-1/4 grow">
@@ -115,6 +126,7 @@ export default function MainPage() {
                             {...investmentChartSettings}
                             resolveSizeBeforeRender={true}
                             height={300}
+                            loading={loading}
                         />
                     </div>
                 </div>

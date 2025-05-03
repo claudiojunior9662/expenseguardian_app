@@ -204,58 +204,44 @@ export default function MainBankAccounts() {
         }
     };
 
-    const processRowUpdate = (newRow: GridRowModel) => {
+    const processRowUpdate = async (newRow: GridRowModel) => {
         const row = bankAccountsRows.find((row) => row.id === newRow.id);
 
         const decodedToken = jwtDecode(localStorage.getItem("apiAuthToken")!);
+        const updatedRow = { ...newRow, isNew: false };
 
-        if (row!.isNew) {
-            const bankAccount: BankAccount = {
-                type: newRow.type,
-                name: newRow.name,
-                number: newRow.number,
-                balance: newRow.balance,
-                userId: decodedToken.id
-            };
-
-            createBankAccount.execute(bankAccount, localStorage.getItem("apiAuthToken")!).then(() => {
-                return updatedRow;
-            }).catch(() => {
-                Advice.fire({
-                    title: 'Error while creating!',
-                    text: 'Try again or contact support',
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                  });
-                return null;
+        try {
+            if (row!.isNew) {
+                const bankAccount: BankAccount = {
+                    type: newRow.type,
+                    name: newRow.name,
+                    number: newRow.number,
+                    balance: newRow.balance,
+                    userId: decodedToken.id
+                };
+                await createBankAccount.execute(bankAccount, localStorage.getItem("apiAuthToken")!);
+            } else {
+                const bankAccount: BankAccount = {
+                    id: newRow.dataId,
+                    type: newRow.type,
+                    name: newRow.name,
+                    number: newRow.number,
+                    balance: newRow.balance,
+                    userId: decodedToken.id
+                };
+                await updateBankAccount.execute(bankAccount, localStorage.getItem("apiAuthToken")!);
+            }
+            setBankAccountsRows(bankAccountsRows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+            return updatedRow;
+        } catch (error) {
+            Advice.fire({
+                title: row!.isNew ? 'Error while creating!' : 'Error while updating!',
+                text: 'Try again or contact support',
+                icon: 'error',
+                confirmButtonText: 'Ok'
             });
-        } else {
-            const bankAccount: BankAccount = {
-                id: newRow.dataId,
-                type: newRow.type,
-                name: newRow.name,
-                number: newRow.number,
-                balance: newRow.balance,
-                userId: decodedToken.id
-            };
-
-            updateBankAccount.execute(bankAccount, localStorage.getItem("apiAuthToken")!).then(() => {
-                return updatedRow;
-            }).catch(() => {
-                Advice.fire({
-                    title: 'Error while updating!',
-                    text: 'Try again or contact support',
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                  });
-                return null;
-            });
+            return row; // Return the original row in case of failure
         }
-
-        const updatedRow = newRow;
-        updatedRow.isNew = false;
-        setBankAccountsRows(bankAccountsRows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        return updatedRow;
     };
 
     return (

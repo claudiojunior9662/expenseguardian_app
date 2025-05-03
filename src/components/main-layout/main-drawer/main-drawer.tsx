@@ -3,6 +3,7 @@ import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divide
 import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { useRouter } from "next/navigation";
 
 interface MainDrawerProps {
@@ -56,6 +57,17 @@ const MainDrawer = ({ open, handleClose }: MainDrawerProps) => {
                             <AttachMoneyIcon />
                         </ListItemIcon>
                         <ListItemText primary={'Registrations'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+            <Divider>Bank</Divider>
+            <List>
+                <ListItem key={'Accounts'} disablePadding>
+                    <ListItemButton onClick={() => handleRoute('/bank/account')}>
+                        <ListItemIcon>
+                            <AccountBalanceIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Accounts'} />
                     </ListItemButton>
                 </ListItem>
             </List>

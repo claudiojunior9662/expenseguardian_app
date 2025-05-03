@@ -4,6 +4,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { useRouter } from "next/navigation";
 
 interface MainDrawerProps {
@@ -68,6 +69,14 @@ const MainDrawer = ({ open, handleClose }: MainDrawerProps) => {
                             <AccountBalanceIcon />
                         </ListItemIcon>
                         <ListItemText primary={'Accounts'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={'Cards'} disablePadding>
+                    <ListItemButton onClick={() => handleRoute('/card')}>
+                        <ListItemIcon>
+                            <CreditCardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Cards'} />
                     </ListItemButton>
                 </ListItem>
             </List>

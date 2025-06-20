@@ -16,7 +16,7 @@ export default class SpentInfrastructure {
     
             return (await this.axiosComponent.post('/spent/create', spent, { headers }));
         } catch (error) {
-            throw new Error('Error while creating spent : ' + error);
+            throw new Error('Error while creating spent : ' + (error instanceof Error ? error.message : String(error)));
         }
     }
 

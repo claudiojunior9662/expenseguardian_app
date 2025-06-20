@@ -27,7 +27,7 @@ export default function MainPage() {
                 getUserResumeService.execute(
                     {
                         initialDate: new Date('2024-01-01'),
-                        finalDate: new Date('2024-03-30'),
+                        finalDate: new Date(),
                         userId: 1
                     },
                     token

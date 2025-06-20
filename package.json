@@ -20,6 +20,7 @@
     "@mui/x-data-grid-generator": "^7.23.5",
     "@mui/x-date-pickers": "^7.23.6",
     "axios": "^1.7.9",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "jose": "^5.9.6",
     "jsonwebtoken": "^9.0.2",

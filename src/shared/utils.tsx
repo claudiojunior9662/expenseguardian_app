@@ -1,7 +1,12 @@
 export function formatCurrency(value: number) {
     return new Intl.NumberFormat('us', {
       style: 'currency',
-      currency: 'USD', // Alterar para a moeda desejada, como 'USD', 'EUR', etc.
+      currency: 'USD',
     }).format(value);
+}
+
+export function getFirstDayInMonth(): Date {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 1);
 }
   
